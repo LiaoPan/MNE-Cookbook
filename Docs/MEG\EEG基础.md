@@ -86,7 +86,11 @@ OpenfMRI（Poldrack和Gorgolewski，2017）提供的数据是已经使用专有�
 
 [Compute power spectrum densities of the sources with dSPM](../Compute power spectrum densities of the sources with dSPM.ipynb)
 
-[Compute the power spectral density of raw data.ipynb](../Compute the power spectral density of raw data.ipynb)
+[Compute the power spectral density of raw data](../Compute the power spectral density of raw data.ipynb)
+
+
+
+[Compute the power spectral density of raw data](../Base_Concepts.ipynb)
 
 ##### 2.2.3 时间滤波(Temporal Filtering)
 
