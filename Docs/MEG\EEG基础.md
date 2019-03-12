@@ -75,8 +75,8 @@ OpenfMRI（Poldrack和Gorgolewski，2017）提供的数据是已经使用专有�
 
 **代码示例**
 
-- [Maxwell filtering to remove environmental noise](../Maxwell filtering to remove environmental noise.ipynb)
-- [Maxwell filter data with movement compensation](../Maxwell filter data with movement compensation.ipynb)
+- [Maxwell filtering to remove environmental noise](../Maxwell_filtering_to_remove_environmental_noise.ipynb)
+- [Maxwell filter data with movement compensation](../Maxwell_filter_data_with_movement_compensation.ipynb)
 
 
 
@@ -84,13 +84,9 @@ OpenfMRI（Poldrack和Gorgolewski，2017）提供的数据是已经使用专有�
 
 **示例**
 
-[Compute power spectrum densities of the sources with dSPM](../Compute power spectrum densities of the sources with dSPM.ipynb)
+[Compute power spectrum densities of the sources with dSPM](../Compute_power_spectrum_densities_of_the_sources_with_dSPM.ipynb)
 
-[Compute the power spectral density of raw data](../Compute\ the\ power\ spectral\ density\ of\ raw\ data.ipynb)
-
-
-
-[Compute the power spectral density of raw data](../Base_Concepts.ipynb)
+[Compute the power spectral density of raw data](../Compute_the_power_spectral_density_of_raw_data.ipynb)
 
 ##### 2.2.3 时间滤波(Temporal Filtering)
 
