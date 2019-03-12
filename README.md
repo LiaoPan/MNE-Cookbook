@@ -3,5 +3,5 @@
 
 ### 目录
 
-- [M/EEG基础知识](./Docs/MEG\EEG基础.md)
+- [M/EEG基础知识实践教程](./Docs/MEG\EEG基础.md)
 

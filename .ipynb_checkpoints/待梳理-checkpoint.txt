@@ -1,2 +1,0 @@
-https://mne-tools.github.io/0.13/auto_tutorials/plot_introduction.html
-https://mne-tools.github.io/0.13/manual/index.html MNE 相关原理说明

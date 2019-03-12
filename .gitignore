@@ -1,3 +1,4 @@
 *.fif
 *.npyi
 *.mat
+*.ipynb_checkpoints
