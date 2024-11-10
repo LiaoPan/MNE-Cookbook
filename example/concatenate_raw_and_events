@@ -1,0 +1,102 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+@date:2024/11/9 19:38
+@author: LiaoPan
+"""
+遍历多个run文件，将其合并为一个fif，并同步修改events事件；
+"""
+
+import os,mne
+import numpy as np
+from pathlib import Path
+from box import Box
+from scipy.io import savemat
+
+# event_id_offset
+event_id_offset = {
+    1: 0,  # No change for run1
+    2: 8,  # Add 8 to event IDs for run2
+    3: 14  # Add 14 to event IDs for run3
+    }
+
+# 将run2中的事件1替换为事件9，以此类推
+# 将run3中的事件1替换为事件15，以此类推
+event_update = {
+    "run2":[(1,9),(2,10),(3,11),(4,12),(5,13),(6,14)],
+    "run3":[(1,15),(2,16),(3,17),(4,18),(5,19),(6,20)]
+}
+
+def main(data_path:Path,data_cat_path:Path,cfg:dict):
+    subjs = cfg.subjs
+    runs = cfg.runs
+    
+    for subj in subjs:
+        raw_path = data_path / f"sub{subj:02d}"
+
+        op_path = data_cat_path / f"sub-{subj:02d}"
+        op_path.mkdir(parents=True,exist_ok=True)
+        fn_data = op_path / f"sub-{subj:02d}_tsss_trans.fif"
+        
+        # Variable to track the cumulative time adjustment
+ 
+        all_events = []
+        first_samps = []
+        last_samps = []
+  
+
+        for run_id in runs:
+            fif_fn = os.path.join(raw_path, f"run{run_id:01d}_tsss_trans.fif")
+                    
+            if run_id == 1:
+                raw_cat = mne.io.read_raw_fif(fif_fn)
+                events = mne.find_events(raw_cat,stim_channel='STI101', shortest_event=2, min_duration=0.002, verbose=False)
+                
+                all_events.append(events)
+                first_samps.append(raw_cat.first_samp)
+                last_samps.append(raw_cat.last_samp)
+            else:
+                tmp = mne.io.read_raw_fif(fif_fn)
+                events = mne.find_events(tmp, stim_channel='STI101', shortest_event=2, min_duration=0.002, verbose=False)
+                first_samps.append(tmp.first_samp)
+                last_samps.append(tmp.last_samp)
+                
+                # Adjust the event IDs
+                for old_evt,new_evt in event_update[f"run{run_id}"]:
+                    events = mne.merge_events(events,[old_evt],new_evt,replace_events=True)
+                print("Updates Events:",events) 
+                
+                # time_offset += raw.times[-1]
+                all_events.append(events)
+                
+                mne.concatenate_raws([raw_cat,tmp])
+                del tmp
+        
+        # merged_events = np.concatenate(all_events, axis=0)
+        # 
+        print("first_samps:",first_samps)
+        print("last_samps:",last_samps)
+        all_events = mne.concatenate_events(all_events,first_samps,last_samps)
+        print("\nall events:",all_events)
+        
+        raw_cat.load_data().add_events(all_events,stim_channel='STI101',replace=True)
+        raw_cat.save(fn_data,overwrite=True) 
+        del raw_cat 
+        
+        raw = mne.io.read_raw_fif(fn_data)
+        e = mne.find_events(raw, stim_channel='STI101', shortest_event=2, min_duration=0.002, verbose=False)
+        print("events all:",e)
+
+            
+        
+if __name__=="__main__":
+    root_dir = Path("/SQUID/")
+    data_path = root_dir / "raw/11.02"
+    data_cat_path = root_dir / 'data_cat/raw'
+
+    # Configures
+    cfg = Box()
+    cfg.subjs = [1,2,3,4,5,6,7,8,9,10]  # 需要对应修改
+    cfg.runs = [1,2,3] # run个数
+    
+    main(data_path,data_cat_path,cfg)
